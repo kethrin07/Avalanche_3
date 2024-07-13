@@ -12,11 +12,66 @@ This project involves creating an ERC20 token named `MyToken` (symbol: `MTK`) us
 
 #### How to Run the Program
 
- **Using Remix IDE**
-   - **Open Remix IDE**: Go to [Remix IDE](https://remix.ethereum.org/).
-   - **Create File**: Create a new file named `MyToken.sol` and paste your contract code.
-   - **Compile**: Select the Solidity compiler version (e.g., 0.8.0) and compile the contract.
-   - **Deploy**: Use "Injected Web3" for testnet/mainnet or "JavaScript VM" for local testing, then deploy and confirm the transaction in MetaMask.
+1. **Open Remix IDE**: 
+   - Go to [Remix IDE](https://remix.ethereum.org/) in your web browser.
+
+2. **Create File**: 
+   - In the left panel, click on the "+" icon to create a new file.
+   - Name the file `MyToken.sol`.
+   - Paste the following smart contract code into the file:
+
+   ```solidity
+   // SPDX-License-Identifier: MIT
+   pragma solidity ^0.8.0;
+
+   import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+   contract MyToken is ERC20 {
+       address public owner;
+
+       constructor(uint256 initialSupply) ERC20("MyToken", "MTK") {
+           owner = msg.sender;
+           _mint(msg.sender, initialSupply);
+       }
+
+       function mint(address to, uint256 amount) public onlyOwner {
+           _mint(to, amount);
+       }
+
+       function burn(uint256 amount) public {
+           _burn(msg.sender, amount);
+       }
+
+       modifier onlyOwner() {
+           require(msg.sender == owner, "Only owner can call this function");
+           _;
+       }
+   }
+   ```
+
+3. **Compile the Contract**:
+   - Click on the "Solidity Compiler" tab (suitcase icon on the left).
+   - Ensure the compiler version is set to `0.8.0` or the version compatible with your contract.
+   - Click on "Compile MyToken.sol".
+   - Check for any compilation errors and resolve them if necessary.
+
+4. **Deploy the Contract**:
+   - Click on the "Deploy & Run Transactions" tab (icon with a play button).
+   - Select the environment for deployment:
+     - **Injected Web3**: Use this if you want to deploy to a testnet or mainnet using MetaMask.
+     - **JavaScript VM**: Use this for local testing within Remix.
+   - Ensure your MetaMask is connected and set to the desired network (if using "Injected Web3").
+   - Click on "Deploy" next to the `MyToken` contract.
+   - Confirm the transaction in MetaMask (if using "Injected Web3").
+
+5. **Interact with the Contract**:
+   - After deployment, the contract will appear in the "Deployed Contracts" section.
+   - Expand the deployed contract to see available functions:
+     - **Mint Tokens**: As the owner, call the `mint` function, specifying the address and amount of tokens to mint.
+     - **Burn Tokens**: Any user can call the `burn` function, specifying the amount of tokens to burn.
+     - **Transfer Tokens**: Use the standard ERC20 `transfer` function to send tokens to other addresses.
+
+By following these steps, you can successfully compile, deploy, and interact with your ERC20 token contract using Remix IDE.
 
 ## Authors
 
